@@ -1,0 +1,17 @@
+CRM Data Cleaner API — RapidAPI listing (draft)
+
+Short description
+Normalize messy contact rows (JSON or CSV), detect duplicate groups, suggest which row to keep, emit warnings, and export CRM-ready columns for HubSpot, Salesforce, Zoho, or generic spreadsheets.
+
+Long description
+Send batches of customer records with flexible column names. The API validates and normalizes email (RFC-style syntax), parses phone numbers to E.164 using libphonenumber with a configurable default region, title-cases names, and clusters likely duplicates by email, phone, or name+company. Responses include duplicate_groups, merge_recommendations (canonical row = most complete), field-level warnings, summary stats, and crm_import_rows mapped to your chosen export_format.
+
+Authentication: X-API-Key or Authorization: Bearer.
+
+Tiers (reference — configure on server): Free through Pro with per-minute and monthly quotas, max batch size, and Pro monthly cap suitable for controlled launch (see OpenAPI /health and usage object).
+
+Errors: JSON envelope with error.code, error.message, and error.request_id (also X-Request-Id).
+
+Endpoints: GET /health; POST /v1/clean (JSON); POST /v1/clean/csv (multipart CSV, optional CSV download).
+
+Environment: CRM_API_KEYS, CRM_MAX_JSON_BYTES, CRM_MAX_CSV_BYTES, CRM_USAGE_LOG_PATH, optional CRM_DIAGNOSTICS_SECRET.
