@@ -5,7 +5,7 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://127.0.0.1:8000" },
+    { "key": "baseUrl", "value": "https://crm-data-cleaner.onrender.com" },
     { "key": "apiKey", "value": "sk_free_test" },
     { "key": "freeTierKey", "value": "sk_free_test" }
   ],
