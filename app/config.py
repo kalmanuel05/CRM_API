@@ -6,6 +6,16 @@ from functools import lru_cache
 
 from app.tiers import TierId
 
+_TRUTHY = frozenset({"1", "true", "yes", "on"})
+
+
+def env_flag(name: str, *, default: bool = False) -> bool:
+    """Parse CRM_* boolean env vars (false/0/no/off are false; unset uses default)."""
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in _TRUTHY
+
 
 @dataclass(frozen=True)
 class HttpLimits:
@@ -54,6 +64,6 @@ def _parse_api_keys(raw: str | None) -> dict[str, TierId]:
 @lru_cache
 def get_settings() -> tuple[dict[str, TierId], bool, str]:
     keys = _parse_api_keys(os.environ.get("CRM_API_KEYS"))
-    auth_disabled = os.environ.get("CRM_AUTH_DISABLED", "").lower() in ("1", "true", "yes")
+    auth_disabled = env_flag("CRM_AUTH_DISABLED", default=False)
     log_path = os.environ.get("CRM_USAGE_LOG_PATH", "logs/usage.jsonl")
     return keys, auth_disabled, log_path

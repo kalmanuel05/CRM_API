@@ -2,6 +2,19 @@ from __future__ import annotations
 
 import os
 import time
+from pathlib import Path
+
+
+def _load_dotenv() -> None:
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        return
+    root = Path(__file__).resolve().parent.parent
+    load_dotenv(root / ".env")
+
+
+_load_dotenv()
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, Query, Request, UploadFile, status
@@ -11,7 +24,7 @@ from fastapi.responses import JSONResponse, Response
 from app.api_description import API_DESCRIPTION
 from app.auth_deps import AuthContext, enforce_rate_limit, max_batch_for_tier
 from app.cleaning import process_batch
-from app.config import get_diagnostics_secret, get_http_limits, get_settings
+from app.config import env_flag, get_diagnostics_secret, get_http_limits, get_settings
 from app.crm_formats import format_rows
 from app.csv_utils import csv_bytes_from_dicts, dicts_from_csv
 from app.error_monitor import recent_errors_snapshot
@@ -189,7 +202,7 @@ if _diag_secret:
     @app.get(
         "/v1/diagnostics/recent-errors",
         tags=["diagnostics"],
-        include_in_schema=bool(os.environ.get("CRM_DIAGNOSTICS_OPENAPI", "")),
+        include_in_schema=env_flag("CRM_DIAGNOSTICS_OPENAPI", default=False),
     )
     def diagnostics_recent_errors(
         x_diagnostics_secret: Annotated[str | None, Header(alias="X-Diagnostics-Secret")] = None,

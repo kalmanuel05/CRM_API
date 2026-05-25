@@ -6,8 +6,8 @@
   },
   "variable": [
     { "key": "baseUrl", "value": "http://127.0.0.1:8000" },
-    { "key": "apiKey", "value": "your_api_key_here" },
-    { "key": "freeTierKey", "value": "your_free_tier_key_here" }
+    { "key": "apiKey", "value": "sk_free_test" },
+    { "key": "freeTierKey", "value": "sk_free_test" }
   ],
   "item": [
     {
